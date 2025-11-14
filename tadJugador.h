@@ -1,4 +1,4 @@
-#ifdef JUGADOR_H
+#ifndef JUGADOR_H
 #define JUGADOR_H
 
 #include <string>
