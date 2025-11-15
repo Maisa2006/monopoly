@@ -32,9 +32,12 @@ class jugador { //la clase con los atributos de un jugador
         void agregarPropiedad(const string& propiedad);
         void agregarCarta(const string& carta);
 
-        //y ahora hay que mostrar la info del jugador segun sus atributos
+        //mostrar 
 
         string mostrarJugador() const;
+         
+        //verificar si esta en bancarrota
+        bool estaBancarrota() const;
 
 
 };
