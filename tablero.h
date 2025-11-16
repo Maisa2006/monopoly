@@ -1,27 +1,32 @@
-//
-// Created by Nicol on 8/11/2025.
-//
-
 #ifndef TABLERO_H
 #define TABLERO_H
 
-// librerias necesaria
-#include <cstudio>
-#include "casilla.h"
+
+#include <string>
 
 using namespace std;
 
-class tablero {
+struct Casilla {
+    int numCasilla;
+    string nombre;
+    string color;
+    string tipo; // propiedad, impuesto, cárcel, ...
+    int precio;
+    Casilla *siguiente;
+    Casilla *anterior;
+}; // acceder a atributos se usa el .
 
-  private:
-    const int numCasillas = 40; // número de casillas es fijo
+// crear nueva casilla
+Casilla* crearCasilla(int numCasilla, const string& nombre, const string& tipo, const string& color, int precio);
 
-  public:
+Casilla* cargarCasillas(const string& archivo);
 
+// mostrar las casillas
+void mostrarCasillas(Casilla* inicio, int n);
 
+// liberar memoria
+void liberarTablero(Casilla* inicio);
 
-};
-
-
+void tableroVisual(Casilla* inicio);
 
 #endif //TABLERO_H
