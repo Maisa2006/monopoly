@@ -1,3 +1,8 @@
+
+
+/*
+prueba para ver si funciona el tad jugador 
+
 #include <iostream>
 #include "tadJugador.h"
 using namespace std;
@@ -20,14 +25,19 @@ int main() {
     p.agregarPropiedad("Parque Central");
 
     // Probar agregarCarta()
-    p.agregarCarta("Salir de la cárcel");
+    p.agregarCarta("Salir de la carcel");
+    p.agregarCarta("Avanzar a la salida");
+
+    // Probar eliminarPropiedad()
+    p.eliminarPropiedad("Avenida Siempre Viva");
 
     // Mostrar info
     cout << p.mostrarJugador() << endl;
 
     // Probar bancarrota
-    cout << "¿Está en bancarrota?: "
-         << (p.estaBancarrota() ? "Sí" : "No") << endl;
+    cout << "Esta en bancarrota?: "
+         << (p.estaBancarrota() ? "Si" : "No") << endl;
 
     return 0;
 }
+*/
