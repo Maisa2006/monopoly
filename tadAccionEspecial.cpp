@@ -1,28 +1,28 @@
 #include "tadAccionEspecial.h"
 
-AccionEspecial::AccionEspecial() {
-    // Constructor vacío
+void AccionEspecial::registrarJugada(const Jugada& jugada) {
+    historial.push(jugada);
 }
 
-void AccionEspecial::registrarjugada(const string& jugada) {
-    acciones.push_back(jugada);
-}
-
-string AccionEspecial::deshacer() {
-    if (!acciones.empty()) {
-        string ultimaAccion = acciones.back();
-        acciones.pop_back();
-        return ultimaAccion;
+Jugada AccionEspecial::deshacer() {
+    if (historial.empty()){
+        return Jugada();
     }
-    return ""; // Retorna cadena vacía si no hay acciones
+    Jugada ultima = historial.top();
+    historial.pop();
+    return ultima;
 }
 
 bool AccionEspecial::estaVacio() const {
-
-    if(acciones.empty()){
+    if (historial.empty()){
         return true;
     } else {
         return false;
     }
-    
+}
+
+void AccionEspecial::reiniciar() {
+    while (!historial.empty()) {
+        historial.pop();
+    }
 }
