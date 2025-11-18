@@ -2,9 +2,11 @@
 #include <fstream>
 #include <iostream>
 #include <sstream>
-#include "Tablero.h"
+#include "tablero.h"
+//#include "Cartas.h"
+#include "jugador.h"
+using namespace std;
 
-//using namespace std;
 
 // crear nueva casilla
 Casilla* crearCasilla(int numCasilla, const string& nombre, const string& tipo, const string& color, int precio){
@@ -19,6 +21,8 @@ Casilla* crearCasilla(int numCasilla, const string& nombre, const string& tipo, 
   return nueva;
 }
 
+
+// muestra las casilla del tablero
 Casilla* cargarCasillas(const string& archivo) {
     ifstream fin(archivo); // abrir archivo en modo lectura
     if (!fin.is_open()) { // verifica si el archivo se abrió de forma correcta
@@ -91,6 +95,7 @@ Casilla* cargarCasillas(const string& archivo) {
     return primera;
 }
 
+
 // mostrar las casillas
 void mostrarCasillas(Casilla* inicio, int n) {
     if (!inicio) return; // si el puntero de inicio es nulo, no hay tablero
@@ -106,6 +111,7 @@ void mostrarCasillas(Casilla* inicio, int n) {
         actual = actual->siguiente;
     }
 }
+
 
 // liberar memoria
 void liberarTablero(Casilla* inicio) {
@@ -126,7 +132,9 @@ void liberarTablero(Casilla* inicio) {
     }
 }
 
-void tableroVisual(Casilla* inicio) {
+
+// muestra el tablero de manera visual a los jugadores
+void tableroVisual(Casilla* inicio, const vector<jugador*>& jugadores) {
     if (!inicio) return; // si el puntero de inicio es nulo, no hay tablero
 
     // array con todas las casillas
@@ -143,24 +151,24 @@ void tableroVisual(Casilla* inicio) {
     // fila superior (casillas 20-30)
     cout << "+----+----+----+----+----+----+----+----+----+----+----+\n";
     cout << "|";
-    for (int i = 20; i <= 30; i++)
-        cout << " " << casillas[i]->numCasilla << " |";
+    for (int i = 20; i <= 30; i++){
+        cout << " " << casillaConJugadores(casillas[i]->numCasilla, jugadores) << " |";
 
-    cout << "\n";
-    cout << "+----+----+----+----+----+----+----+----+----+----+----+\n";
+    }
+    cout << "\n+----+----+----+----+----+----+----+----+----+----+----+\n";
 
     // filas del medio (lado izquierdo y derecho)
     for (int fila = 0; fila < 9; fila++) {
         int izq = 19 - fila;
         int der = 31 + fila;
 
-        cout << "| " << casillas[izq]->numCasilla << " |";
+        cout << "| " << casillaConJugadores(casillas[izq]->numCasilla, jugadores) << " |";
 
         // espacio central
         cout << "                                            ";
 
         // casilla derecha
-        cout << "| " << casillas[der]->numCasilla << " |\n";
+        cout << "| " << casillaConJugadores(casillas[der]->numCasilla, jugadores) << " |\n";
         cout << "+----+                                            +----+\n";
     }
 
@@ -169,10 +177,20 @@ void tableroVisual(Casilla* inicio) {
     cout << "|";
     for (int i = 10; i >= 0; i--) {
         if (casillas[i]->numCasilla < 10) // números de una cifra, espacio de más
-            cout << " " << casillas[i]->numCasilla << "  |";
+            cout << " " << casillaConJugadores(casillas[i]->numCasilla, jugadores) << "  |";
         else
-            cout << " " << casillas[i]->numCasilla << " |"; // números de dos
+            cout << " " << casillaConJugadores(casillas[i]->numCasilla, jugadores) << " |";
     }
-    cout << "\n";
-    cout << "+----+----+----+----+----+----+----+----+----+----+----+\n";
+    cout << "\n+----+----+----+----+----+----+----+----+----+----+----+\n";
+}
+
+
+// funcion aux para mostrar el numero de casilla y los jugadores en ella
+string casillaConJugadores(int numCasilla, const vector<jugador*>& jugadores) {
+    string celda = to_string(numCasilla); // empieza con el numero de la casilla
+    for (auto j : jugadores) {
+        if (j->getPosicion() == numCasilla)
+            celda += j->getNombre().substr(0, 2); // dos primeras iniciales del jugador
+    }
+    return celda;
 }

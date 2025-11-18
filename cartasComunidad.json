@@ -1,0 +1,82 @@
+[
+  {
+    "texto": "Avanza a Salida (Cobra $200)",
+    "accion": "GO",
+    "valor": 200
+  },
+  {
+    "texto": "Fondo de Navidad Madurado — Cobra $100",
+    "accion": "COBRAR100",
+    "valor": 100
+  },
+  {
+    "texto": "Gran Noche de Ópera — Cobra $50 de cada jugador",
+    "accion": "COBRAR50JUGADORES",
+    "valor": 50
+  },
+  {
+    "texto": "De la venta de acciones obtienes $45",
+    "accion": "COBRAR45",
+    "valor": 45
+  },
+  {
+    "texto": "Reembolso de Impuestos sobre la Renta — Cobra $20",
+    "accion": "COBRAR20",
+    "valor": 20
+  },
+  {
+    "texto": "Error del Banco a Tu Favor — Cobra $200",
+    "accion": "COBRAR200",
+    "valor": 200
+  },
+  {
+    "texto": "Has Ganado el Segundo Premio en un Concurso de Belleza — Cobra $10",
+    "accion": "COBRAR10",
+    "valor": 10
+  },
+  {
+    "texto": "Heredas $100",
+    "accion": "COBRAR100",
+    "valor": 100
+  },
+  {
+    "texto": "Recibe por Servicios $25",
+    "accion": "COBRAR25",
+    "valor": 25
+  },
+  {
+    "texto": "El Seguro de Vida Madurado — Cobra $100",
+    "accion": "COBRAR100",
+    "valor": 100
+  },
+  {
+    "texto": "Paga Impuestos Escolares de $150",
+    "accion": "PAGAR150",
+    "valor": 150
+  },
+  {
+    "texto": "Honorarios del Médico — Paga $50",
+    "accion": "PAGAR50",
+    "valor": 50
+  },
+  {
+    "texto": "Te Han Tasado para Reparaciones de Calles — $40 por Casa — $115 por Hotel",
+    "accion": "REPARACIONES",
+    "valor": 0
+  },
+  {
+    "texto": "Paga Honorarios del Hospital de $100",
+    "accion": "PAGAR100",
+    "valor": 100
+  },
+  {
+    "texto": "Ve a la Cárcel — Ve Directamente a la Cárcel",
+    "accion": "CARCEL",
+    "valor": 0
+  },
+  {
+    "texto": "Sal de la Cárcel Gratis",
+    "accion": "SALIRCARCEL",
+    "valor": 0
+  }
+]
