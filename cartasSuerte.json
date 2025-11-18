@@ -1,0 +1,77 @@
+[
+  {
+    "texto": "Retrocede 3 Casillas",
+    "accion": "RETROCEDER3",
+    "valor": 0
+  },
+  {
+    "texto": "Avanza a St. Charles Place — Si Pasas por Salida, Cobra $200",
+    "accion": "STCHARLES",
+    "valor": 0
+  },
+  {
+    "texto": "Avanza a Illinois Ave — Si Pasas por Salida, Cobra $200",
+    "accion": "ILLINOIS",
+    "valor": 0
+  },
+  {
+    "texto": "Avanza a Salida (Cobra $200)",
+    "accion": "GO",
+    "valor": 200
+  },
+  {
+    "texto": "Haz un Viaje a Reading Railroad — Si Pasas por Salida, Cobra $200",
+    "accion": "READING",
+    "valor": 0
+  },
+  {
+    "texto": "Da un Paseo por el Paseo Marítimo — Avanza la Ficha al Paseo Marítimo",
+    "accion": "BOARDWALK",
+    "valor": 0
+  },
+  {
+    "texto": "Avanza al Ferrocarril Más Cercano y Paga el Doble del Alquiler",
+    "accion": "FERROCARRIL",
+    "valor": 0
+  },
+  {
+    "texto": "Avanza a la servicio Más CercanO. Si Tiene Propietario, tira los dados y paga 10x",
+    "accion": "SERVICIO",
+    "valor": 0
+  },
+  {
+    "texto": "El Banco Te Paga un Dividendo de $50",
+    "accion": "DIVIDENDO50",
+    "valor": 50
+  },
+  {
+    "texto": "Tu Edificio y Préstamo Maduran — Cobra $150",
+    "accion": "COBRAR150",
+    "valor": 150
+  },
+  {
+    "texto": "Has Sido Elegido Presidente del Consejo — Paga a Cada Jugador $50",
+    "accion": "PAGAR50JUGADORES",
+    "valor": 50
+  },
+  {
+    "texto": "Paga Impuestos a los Pobres de $15",
+    "accion": "PAGAR15",
+    "valor": 15
+  },
+  {
+    "texto": "Haz Reparaciones Generales en Todas Tus Propiedades — Por Cada Casa Paga $25 — Por Cada Hotel $100",
+    "accion": "REPARACIONES",
+    "valor": 0
+  },
+  {
+    "texto": "Ve a la Cárcel — Ve Directamente a la Cárcel",
+    "accion": "CARCEL",
+    "valor": 0
+  },
+  {
+    "texto": "Sal de la Cárcel Gratis",
+    "accion": "SALIRCARCEL",
+    "valor": 0
+  }
+]
