@@ -32,6 +32,7 @@ class jugador { //la clase con los atributos de un jugador
         //las operaciones a ejecutar 
         void mover(int espacios);
         void actualizarDinero(int cantidad);
+        bool pagar(int cantidad); //devuelve true si se pudo pagar, false si no
 
         //el operador por referencia en este caso se usa para no trabajar sobre una copia y que no se pueda modificar el valor original
         void agregarPropiedad(const string& propiedad);

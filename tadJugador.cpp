@@ -46,6 +46,16 @@ void jugador::actualizarDinero(int cantidad){
     }
 }
 
+bool jugador::pagar(int cantidad) {
+    if (dinero >= cantidad) {
+        dinero -= cantidad;
+        return true; // Pago exitoso
+    } 
+
+    dinero = 0;//manejo de errores para que el jugador no quede en negativo
+    return false; // No se pudo pagar
+}
+
 //trabaja como un anspropiedad, agrega una propiedad al final del vector propiedades
 
 void jugador::agregarPropiedad(const string& propiedad){
