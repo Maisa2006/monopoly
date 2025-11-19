@@ -33,6 +33,7 @@ void Cartas::inicializar() {
 // agarra carta de suerte
 void Cartas::tomarSuerte(jugador* jug, Casilla* tablero, vector<jugador*>& todosJugadores) {
     Carta carta = tomarCarta(suerte); // tomar carta de suerte
+    cout << jug->getNombre() << " sacó una carta de Suerte: " << carta.texto << endl;
     ejecutarAccion(carta, jug, tablero, todosJugadores); // ejecutar accion de la carta
 }
 
@@ -40,6 +41,7 @@ void Cartas::tomarSuerte(jugador* jug, Casilla* tablero, vector<jugador*>& todos
 // agarra carta de la caja de comunidad
 void Cartas::tomarComunidad(jugador* jug, Casilla* tablero, vector<jugador*>& todosJugadores) {
     Carta carta = tomarCarta(comunidad); // tomar carta de comunidad
+    cout << jug->getNombre() << " sacó una carta de Comunidad: " << carta.texto << endl;
     ejecutarAccion(carta, jug, tablero, todosJugadores); // ejecutar accion de la carta
 }
 
@@ -100,17 +102,15 @@ void Cartas::ejecutarAccion(const Carta &carta, jugador* jug, Casilla* tablero, 
     }
 
     // COBRAR
-    else if (a.find("COBRAR") == 0 || a == "DIVIDENDO50") { // paga al banco
-        jug->actualizarDinero(carta.valor); // se resta
+
+    else if (a.rfind("COBRAR", 0) == 0 || a == "DIVIDENDO50") {
+        jug->actualizarDinero(carta.valor);
         cout << jug->getNombre() << " cobra $" << carta.valor << endl;
     }
-
-    // PAGAR
-    else if (a.find("PAGAR") == 0 && a != "PAGAR50JUGADORES") { // pagar a cada jugador 50
+    else if (a.rfind("PAGAR", 0) == 0 && a != "PAGAR50JUGADORES") {
         jug->actualizarDinero(-carta.valor);
         cout << jug->getNombre() << " paga $" << carta.valor << endl;
     }
-
     else if (a == "PAGAR50JUGADORES") {
         for (auto* otro : todosJugadores) {
             if (otro != jug) {

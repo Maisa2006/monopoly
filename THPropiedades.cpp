@@ -86,3 +86,20 @@ PropiedadDetallada* buscarPorNumCasilla(TablaPropiedades* tabla, int numCasilla)
 void liberarTabla(TablaPropiedades* tabla) {
     if(tabla) delete tabla;
 }
+
+int cantidadPorColor(TablaPropiedades* tabla, const string& color) {
+    int total = 0;
+    for (int i = 0; i < 40; ++i) {
+        if (tabla->propiedades[i].existe && tabla->propiedades[i].color == color)
+            total++;
+    }
+    return total;
+}
+
+string colorDePropiedad(TablaPropiedades* tabla, const string& nombre) {
+    for (int i = 0; i < 40; ++i) {
+        if (tabla->propiedades[i].existe && tabla->propiedades[i].nombre == nombre)
+            return tabla->propiedades[i].color;
+    }
+    return "";
+}

@@ -47,7 +47,7 @@ public:
 
     int lanzarDados();
     void turnoJugador();
-    void moverJugador(int espacios); 
+    void moverJugador(int espacios, jugador* j); 
 
     void cobrarAlquiler(jugador* jugador, const string& casilla);
     bool tieneMonopolio(jugador* jugador, const string& color);
@@ -64,8 +64,21 @@ public:
     bool Victoria() const;
     string obtenerGanador() const;
 
-
     void mostrarEstadoJuego() const;
+
+
+    void mostrarTablero() const;
+    void infoPropiedadPorNumero(int num) const;
+    int getUltimoDado1() const;
+    int getUltimoDado2() const;
+    AccionEspecial& getAccionEspecial();
+    jugador* buscarJugadorPorNombre(const string& nombre) const;
+    bool venderPropiedad(jugador* j, const string& nombrePropiedad);
+    bool comprarPropiedad(jugador* j);
+    void sacarCartaSuerteDeTurno(jugador* j);
+    void sacarCartaComunidadDeTurno(jugador* j);
+    Casilla* getTablero() const;
+
 
 };
 

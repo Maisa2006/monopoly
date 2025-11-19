@@ -96,7 +96,7 @@ string jugador::mostrarJugador() const {
 
     info += "Propiedades: ";
     if(propiedades.empty()) { //si no hay ninguna propiedad
-        info += "[Ninguna\n";
+        info += "[Ninguna";
     } else {
         info += "[";
         for (size_t i = 0; i < propiedades.size(); ++i) {
@@ -111,7 +111,7 @@ string jugador::mostrarJugador() const {
     //lo mismo que propiedad pero para cartas
     info += "Cartas: ";
     if(cartas.empty()) {
-        info += "[Ninguna\n";
+        info += "[Ninguna";
     } else {
         info += "[";
         for (size_t i = 0; i < cartas.size(); ++i) {
@@ -136,3 +136,7 @@ bool jugador::estaBancarrota() const {
     }
     
 } 
+
+void jugador::setDinero(int nuevoDinero) {
+    dinero = nuevoDinero;
+}

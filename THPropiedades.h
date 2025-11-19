@@ -26,5 +26,7 @@ TablaPropiedades* crearTabla();
 TablaPropiedades* cargarPropiedades(const string& archivo);
 PropiedadDetallada* buscarPorNumCasilla(TablaPropiedades* tabla, int numCasilla);
 void liberarTabla(TablaPropiedades* tabla);
+string colorDePropiedad(TablaPropiedades* tabla, const string& nombre);
+int cantidadPorColor(TablaPropiedades* tabla, const string& color);
 
 #endif // THPROPIEDADES_H

@@ -122,6 +122,10 @@ Casilla* cargarCasillas(const string& archivo) {
         getline(ss, nombre, ',');
         getline(ss, tipo, ',');
 
+        for (size_t i = 0; i < tipo.size(); i++) {
+            tipo[i] = tolower(tipo[i]);
+        }
+
         // inicializar valores por defecto
         color = "-"; // si no hay color, se usa -
         int precio = 0; //precio inicial
@@ -130,18 +134,17 @@ Casilla* cargarCasillas(const string& archivo) {
         if (ss.good()) {
             string resto; // variable temporal
             getline(ss, resto, ',');
-            if (tipo == "Propiedad" || tipo == "Estación" || tipo == "Servicio") {
+            if (tipo == "propiedad" || tipo == "estación" || tipo == "servicio") {
                 color = resto; // campo correspondiente al color
                 if (ss.good()) {
                     string precioStr2;
-                    getline(ss, precioStr2, ',');// lee el siguiente campo separado por coma y lo guardar en la variable temporal
-                    precio = stoi(precioStr2); // casteo
+                    getline(ss, precioStr2, ',');
+                    precio = stoi(precioStr2);
                 }
-            } else if (tipo == "Especial" && ss.good()) {
-                // para casos como Income Tax o Luxury Tax
-                precio = stoi(resto);
-            }
+        } else if (tipo == "especial" && ss.good()) {
+            precio = stoi(resto);
         }
+    }
 
         Casilla* nueva = crearCasilla(num, nombre, tipo, color, precio);
 
@@ -169,19 +172,18 @@ Casilla* cargarCasillas(const string& archivo) {
 
 // mostrar las casillas
 void mostrarCasillas(Casilla* inicio, int n) {
-    if (!inicio) return; // si el puntero de inicio es nulo, no hay tablero
-
-    Casilla* actual = inicio; // puntero aux para recorrer la lista
-
-    // mostrar las primeras n casillas
+    Casilla* aux = inicio;
     for (int i = 0; i < n; i++) {
-        cout << actual->numCasilla << ": " << actual->nombre
-             << " - " << actual->tipo
-             << " - " << actual->color
-             << " - $" << actual->precio << "\n";
-        actual = actual->siguiente;
+        cout << aux->numCasilla << " - " << aux->nombre 
+             << " (" << aux->tipo << ")";
+        if (!aux->propietario.empty()) {
+            cout << " | Propietario: " << aux->propietario;
+        }
+        cout << endl;
+        aux = aux->siguiente;
     }
 }
+
 
 
 // liberar memoria

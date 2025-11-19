@@ -53,55 +53,98 @@ int Juego::lanzarDados() {
     return suma;
 }
 
-void Juego::turnoJugador(){
-    jugador* jugador = obtenerJugadorActual();
 
-    //primero se verifica si esta en la carcel 
-    if(turnosEnCarcel[jugador] > 0){
-        turnoEnCarcel(jugador);
-        return; //si esta en la carcel no puede hacer nada mas en su turno 
-    }
 
-    cout << "\nTurno de " << jugador->getNombre() << endl;
+void Juego::turnoJugador() {
+    jugador* j = obtenerJugadorActual();
+    cout << "\nTurno de " << j->getNombre() << endl;
 
-    int suma = lanzarDados();
+    
+    
+    if (turnosEnCarcel[j] > 0) {
+        cout << j->getNombre() << " está en la cárcel. Turnos restantes: " << turnosEnCarcel[j] << endl;
+        cout << "1. Pagar $50\n2. Intentar sacar dobles\n";
+        int opcion; cin >> opcion;
 
-    cout << "Dado 1: " << ultimoDado1 << ", Dado 2: " << ultimoDado2 << endl;
-
-    if (ultimoDado1 == ultimoDado2) {
-        vecesDoble++;
-        
-        if (vecesDoble == 3) {
-            cout << jugador->getNombre() << " ha sacado 3 dobles y va a la cárcel!" << endl;
-            enviarACarcel(jugador);
-            return; // termina el turno
+        if (opcion == 1) {
+            if (j->pagar(50)) {
+                turnosEnCarcel[j] = 0;
+                cout << j->getNombre() << " pagó $50 y salió de la cárcel.\n";
+            } else {
+                cout << "No tienes suficiente dinero.\n";
+            }
+        } else if (opcion == 2) {
+            int d1 = lanzarDados();
+            int d2 = lanzarDados();
+            cout << "Dado 1: " << d1 << ", Dado 2: " << d2 << endl;
+            if (d1 == d2) {
+                turnosEnCarcel[j] = 0;
+                cout << j->getNombre() << " sacó dobles y salió de la cárcel!\n";
+                j->mover(d1 + d2);
+                procesarCasilla(j);
+            } else {
+                turnosEnCarcel[j]--;
+                cout << j->getNombre() << " no sacó dobles. Turnos restantes: " << turnosEnCarcel[j] << endl;
+                if (turnosEnCarcel[j] == 0) {
+                    j->pagar(50);
+                    cout << j->getNombre() << " cumplió 3 turnos y pagó $50 para salir.\n";
+                }
+            }
         }
-    } else {
-        vecesDoble = 0; // reinicia el conteo de dobles
+        siguienteTurno();
+        return; // termina aquí el turno si estaba en cárcel
     }
 
-    moverJugador(suma); // mueve al jugador
 
-    if(ultimoDado1 == ultimoDado2) {
-        cout << "sacaste par, vuelve a lanzar los dados!" << endl;
-        turnoJugador(); // turno extra por sacar dobles
+    vecesDoble = 0;
+    bool repetir = true;
+    while (repetir) {
+        int suma = lanzarDados();
+        cout << "Dado 1: " << ultimoDado1 << ", Dado 2: " << ultimoDado2 << endl;
+
+        bool esDoble = (ultimoDado1 == ultimoDado2);
+        j->mover(suma);
+        procesarCasilla(j);
+
+        if (esDoble) {
+            vecesDoble++;
+            if (vecesDoble == 3) {
+                cout << j->getNombre() << " sacó 3 dobles y va a la cárcel!\n";
+                enviarACarcel(j);
+                siguienteTurno();
+                return;
+            }
+        } else {
+            repetir = false;
+            vecesDoble = 0;
+            siguienteTurno();
+        }
     }
-
 }
 
-void Juego::moverJugador(int espacios) {
-    jugador* jugador= obtenerJugadorActual();
+
+
+void Juego::moverJugador(int espacios, jugador* j) {
+    jugador* jugador = obtenerJugadorActual();
+
+    // Crear jugada y registrar estado antes
+    Jugada jugada;
+    registrarUltimaJugada(jugada, jugador);
 
     int posActual = jugador->getPosicion();
     int nueva = (posActual + espacios) % 40;
 
-    if(posActual + espacios >= 40){
-        jugador->actualizarDinero(200); //cobra 200 por pasar por salida
-        cout << jugador->getNombre() << " paso por salida y cobra $200!" << endl;
+    if (posActual + espacios >= 40) {
+        jugador->actualizarDinero(200); // cobra 200 por pasar por salida
+        cout << jugador->getNombre() << " pasó por salida y cobra $200!" << endl;
     }
 
     jugador->mover(espacios);
     procesarCasilla(jugador);
+
+    // Registrar estado después
+    registrarNuevaJugada(jugada, jugador);
+    accionEspecial.registrarJugada(jugada);
 }
 
 
@@ -202,25 +245,16 @@ void Juego::cobrarAlquiler(jugador* jugador, const string& nombreCasilla) {
     }
 }
 
-bool Juego::tieneMonopolio(jugador* jugador, const string& color){
-    int total = 0; 
-    int propias= 0; 
-
-    Casilla* aux = tablero;
-
-    for(int i = 0; i < 40; i++){
-        if(aux->color == color){
-            total++;
-            if(aux->propietario == jugador->getNombre()){
-                propias++;
-            }
-        }
-        aux = aux->siguiente;
+bool Juego::tieneMonopolio(jugador* j, const string& color) {
+    vector<string> props = j->getPropiedades();
+    int totalColor = cantidadPorColor(tablaPropiedades, color);
+    int tiene = 0;
+    for (const string& p : props) {
+        if (colorDePropiedad(tablaPropiedades, p) == color)
+            tiene++;
     }
-
-    return (total == propias && total > 0);
+    return tiene == totalColor;
 }
-
 void Juego::verificarBancarrota(jugador* jugador){
     if(jugador->estaBancarrota()){
         eliminarJugador(jugador);
@@ -238,12 +272,29 @@ void Juego::registrarNuevaJugada(Jugada& jugada, jugador* jugador){
     accionEspecial.registrarJugada(jugada);
 }
 
-void Juego::deshacerTurno(){
-    if(!accionEspecial.estaVacio()){
-        Jugada jugada = accionEspecial.deshacer();
-        cout << "jugada deshecha" << endl;
+void Juego::deshacerTurno() {
+    if (accionEspecial.estaVacio()) {
+        cout << "No hay jugadas para deshacer.\n";
+        return;
     }
+
+    Jugada ultima = accionEspecial.deshacer();
+    jugador* j = buscarJugadorPorNombre(ultima.jugador);
+
+    if (!j) {
+        cout << "No se encontró al jugador " << ultima.jugador << " para deshacer.\n";
+        return;
+    }
+
+    // Restaurar solo lo que está permitido
+    j->setPosicion(ultima.posicionAnterior);
+    j->setDinero(ultima.dineroAnterior);
+
+    cout << "Se deshizo la jugada de " << j->getNombre() << ".\n";
 }
+
+
+
 
 void Juego::turnoEnCarcel(jugador* jugador){
     cout << jugador->getNombre() << " esta en la carcel. Turnos restantes: " << turnosEnCarcel[jugador] << endl;
@@ -301,5 +352,125 @@ void Juego::mostrarEstadoJuego() const {
 
 
 
+
+
+
+
+void Juego::mostrarTablero() const {
+    tableroVisual(tablero, jugadores);
+}
+
+void Juego::sacarCartaSuerteDeTurno(jugador* j) {
+    cartas.tomarSuerte(j, tablero, jugadores);
+}
+void Juego::sacarCartaComunidadDeTurno(jugador* j) {
+    cartas.tomarComunidad(j, tablero, jugadores);
+}
+
+
+void Juego::infoPropiedadPorNumero(int num) const {
+    PropiedadDetallada* info = buscarPorNumCasilla(tablaPropiedades, num);
+    if (!info || !info->existe) {
+        cout << "No hay información de propiedad para la casilla " << num << ".\n";
+        return;
+    }
+
+    cout << " Propiedad en casilla " << num << ":\n";
+    cout << " Nombre: " << info->nombre << "\n";
+    cout << " Color: " << info->color << "\n";
+    cout << " Precio: $" << info->precio << "\n";
+
+    cout << " Alquiler: $" << info->alquiler[0] << "\n";
+    cout << " 1 casa: $" << info->alquiler[1] << "\n";
+    cout << " 2 casas: $" << info->alquiler[2] << "\n";
+    cout << " 3 casas: $" << info->alquiler[3] << "\n";
+    cout << " 4 casas: $" << info->alquiler[4] << "\n";
+    cout << " Hotel: $" << info->alquiler[5] << "\n";
+    cout << " Valor por construcción de cada casa: $" << info->valorCasa << "\n";
+   
+    cout << " Ferrocarril: " << (info->esFerrocarril ? "Sí" : "No") << "\n";
+    cout << " Servicio: " << (info->esServicio ? "Sí" : "No") << "\n";
+}
+
+
+int Juego::getUltimoDado1() const {
+    return ultimoDado1;
+}
+
+int Juego::getUltimoDado2() const {
+    return ultimoDado2;
+}
+
+AccionEspecial& Juego::getAccionEspecial() {
+    return accionEspecial;
+}
+
+
+jugador* Juego::buscarJugadorPorNombre(const string& nombre) const {
+    for (jugador* j : jugadores) {
+        if (j->getNombre() == nombre) {
+            return j;
+        }
+    }
+    return nullptr;
+}
+
+
+bool Juego::venderPropiedad(jugador* j, const string& nombrePropiedad) {
+    vector<string> props = j->getPropiedades();
+    bool laTiene = false;
+    for (const string& p : props) {
+        if (p == nombrePropiedad) {
+            laTiene = true;
+            break;
+        }
+    }
+
+    if (!laTiene) {
+        cout << j->getNombre() << " no tiene " << nombrePropiedad << ".\n";
+        return false;
+    }
+
+    int precioBase = 0;
+    for (int i = 0; i < 40; ++i) {
+        if (tablaPropiedades->propiedades[i].existe &&
+            tablaPropiedades->propiedades[i].nombre == nombrePropiedad) {
+            precioBase = tablaPropiedades->propiedades[i].precio;
+            break;
+        }
+    }
+
+    if (precioBase == 0) {
+        cout << "No se encontró información de " << nombrePropiedad << ".\n";
+        return false;
+    }
+
+    int valorVenta = precioBase / 2;
+    j->actualizarDinero(valorVenta);
+    j->eliminarPropiedad(nombrePropiedad);
+    cout << j->getNombre() << " vendió " << nombrePropiedad << " por $" << valorVenta << ".\n";
+
+    return true;
+}
+
+bool Juego::comprarPropiedad(jugador* j) {
+    int pos = j->getPosicion();
+    PropiedadDetallada* info = buscarPorNumCasilla(tablaPropiedades, pos);
+    if (!info || !info->existe) return false;
+
+    if (j->getDinero() < info->precio) {
+        cout << j->getNombre() << " no tiene suficiente dinero para comprar " << info->nombre << ".\n";
+        return false;
+    }
+
+    j->actualizarDinero(-info->precio);
+    j->agregarPropiedad(info->nombre);
+    cout << j->getNombre() << " compró " << info->nombre << " por $" << info->precio << ".\n";
+    return true;
+}
+
+Casilla* Juego::getTablero() const {
+    return tablero;
+}
 
 

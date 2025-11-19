@@ -46,6 +46,7 @@ class jugador { //la clase con los atributos de un jugador
         //mostrar inforrmacion del jugador
         string mostrarJugador() const;
         
+        void setDinero(int nuevoDinero);
 
 
 };
