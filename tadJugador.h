@@ -31,6 +31,7 @@ class jugador { //la clase con los atributos de un jugador
 
         //las operaciones a ejecutar 
         void mover(int espacios);
+        void setPosicion(int nuevaPosicion);
         void actualizarDinero(int cantidad);
         bool pagar(int cantidad); //devuelve true si se pudo pagar, false si no
 

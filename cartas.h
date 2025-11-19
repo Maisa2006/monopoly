@@ -8,7 +8,7 @@
 #include <vector>
 #include "json.hpp"
 #include "tablero.h"
-#include "jugador.h"
+#include "tadJugador.h"
 
 using json = nlohmann::json;
 using namespace std;

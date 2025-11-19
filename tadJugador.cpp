@@ -38,6 +38,12 @@ void jugador::mover(int espacios){
         posicion += 40; 
     }
 }
+void jugador::setPosicion(int nuevaPosicion){
+    posicion = nuevaPosicion % 40;
+    if(posicion < 0) {
+        posicion += 40; 
+    }
+}
 
 void jugador::actualizarDinero(int cantidad){
     dinero += cantidad;
@@ -90,7 +96,7 @@ string jugador::mostrarJugador() const {
 
     info += "Propiedades: ";
     if(propiedades.empty()) { //si no hay ninguna propiedad
-        info += "Ninguna\n";
+        info += "[Ninguna\n";
     } else {
         info += "[";
         for (size_t i = 0; i < propiedades.size(); ++i) {
@@ -105,7 +111,7 @@ string jugador::mostrarJugador() const {
     //lo mismo que propiedad pero para cartas
     info += "Cartas: ";
     if(cartas.empty()) {
-        info += "Ninguna\n";
+        info += "[Ninguna\n";
     } else {
         info += "[";
         for (size_t i = 0; i < cartas.size(); ++i) {

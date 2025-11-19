@@ -3,8 +3,8 @@
 #include <iostream>
 #include <sstream>
 #include "tablero.h"
-//#include "Cartas.h"
-#include "jugador.h"
+#include "Cartas.h"
+#include "tadJugador.h"
 using namespace std;
 
 
@@ -21,6 +21,77 @@ Casilla* crearCasilla(int numCasilla, const string& nombre, const string& tipo, 
   return nueva;
 }
 
+
+//las funciones logicas que faltaban por implementar 
+
+bool seCompra(Casilla* casilla){
+    return (casilla->tipo == "Propiedad" || casilla->tipo == "Estación" || casilla->tipo == "Servicio") && casilla->propietario.empty();
+}
+
+bool tienePropietario(Casilla* casilla){
+    return (!casilla->propietario.empty());
+}
+
+void asignarPropietario(Casilla* casilla, const string& jugador){
+    casilla->propietario = jugador;
+}
+
+void elimPropietario(Casilla* casilla){
+    casilla->propietario = "";
+    casilla->numCasas = 0;
+    casilla->tieneHotel = false;
+}
+
+bool construirCasa(Casilla* casilla){
+    if(casilla->tipo != "Propiedad"){
+        return false;
+    }  // solo propiedades pueden tener casas
+    if(casilla->tieneHotel) {
+        return false; 
+    }// no se pueden construir mas casas si ya hay hotel
+    if(casilla->numCasas >= 4) {
+        return false;
+    }  // maximo 4 casas
+
+    casilla->numCasas++; // construye una casa
+    return true;
+}
+
+bool construirHotel(Casilla* casilla){
+    if(casilla->tipo != "Propiedad"){
+        return false;
+    }  // solo propiedades pueden tener hotel
+    if(casilla->tieneHotel) {
+        return false; 
+    } // ya tiene hotel
+    if(casilla->numCasas < 4) {
+        return false;
+    }  // necesita 4 casas para construir hotel
+
+    casilla->numCasas = 0; // remueve las casas
+    casilla->tieneHotel = true; // construye el hotel
+    return true;
+}
+
+int AlquilerAPagar(const Casilla* casilla, PropiedadDetallada* info){
+    
+if (casilla == NULL || info == NULL) { //verificar si los punteros son nulos
+        return 0;
+    }
+
+    // alquiler nivel 5
+    if (casilla->tieneHotel) {
+        return info->alquiler[5];
+    }
+
+    // CASAS (1 a 4)
+    if (casilla->numCasas >= 1 && casilla->numCasas <= 4) {
+        return info->alquiler[casilla->numCasas];
+    }
+
+    // alquiler básico
+    return info->alquiler[0]; 
+}
 
 // muestra las casilla del tablero
 Casilla* cargarCasillas(const string& archivo) {
